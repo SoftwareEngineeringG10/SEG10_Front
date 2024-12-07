@@ -30,7 +30,7 @@ export default function Login() {
       throw error;
     }
   };
-
+  /* */
   const handleUser = async (email, name) => {
     try {
       const user = await sendAPIRequest('user-get', 'POST', { id: email });
