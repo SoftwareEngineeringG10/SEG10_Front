@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
-
+import "../assets/components/ChatInfo.css";
 const ChatInfo = ({ onAddChat }) => {
   const [showModal, setShowModal] = useState(false);
   const {user} = useContext(AuthContext);
@@ -8,7 +8,7 @@ const ChatInfo = ({ onAddChat }) => {
 
   return (
     <div>
-        <button onClick={() => setShowModal(true)}><box-icon type='solid' name='edit'></box-icon></button>
+        <button onClick={() => setShowModal(true)} className='chatInfoButton'><box-icon type='solid' name='edit'></box-icon></button>
 
       {showModal && (
         <div className="modal">

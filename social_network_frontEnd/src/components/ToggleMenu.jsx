@@ -7,10 +7,10 @@ function ToggleMenu() {
   const navigate = useNavigate();
   const toggleMenu = () => {
     const menu = document.getElementById("side-menu");
-    if (menu.style.width === "250px") {
+    if (menu.style.width === "320px") {
       menu.style.width = "0";
     } else {
-      menu.style.width = "250px";
+      menu.style.width = "320px";
     }
   };
 

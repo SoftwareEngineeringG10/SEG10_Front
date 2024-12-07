@@ -22,6 +22,7 @@ body {
   border: 2px solid #000;
   overflow-y: auto;
   scrollbar-color: #C6C6C6 #ffffff;
+  color: #000;
 }
 .title {
   font-size: 2em;

@@ -1,0 +1,23 @@
+.remove-friend-btn {
+  background-color: #ffffff;
+  color: #000;
+  width: 120px;
+  height: 40px;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-color: #000;
+}
+
+.remove-friend-btn:hover {
+    background-color: #EDECEC;
+    border-color: #000;
+}
+
+.remove-friend-btn:focus {
+    outline: none;
+}

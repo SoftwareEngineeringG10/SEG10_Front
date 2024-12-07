@@ -7,8 +7,8 @@ body {
     cursor: pointer;
     padding: 15px;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 10px;
+    left: 42px;
     z-index: 2;
     color: #000;
 }
@@ -21,16 +21,18 @@ body {
     background-color: #fff;
     overflow-x: hidden;
     transition: 0.3s;
-    padding-top: 60px;
+    padding-top: 65px;
     z-index: 1;
 }
 .side-menu a {
-    padding: 10px 20px;
+    padding: 15px 60px;
     text-decoration: none;
     font-size: 18px;
     color: #333;
     display: block;
     transition: 0.3s;
+    position: relative;
+    top: 5px;
 }
 
 .side-menu a:hover {

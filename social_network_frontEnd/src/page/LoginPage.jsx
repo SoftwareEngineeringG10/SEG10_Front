@@ -30,17 +30,23 @@ export default function Login() {
       throw error;
     }
   };
-  /* */
-  const handleUser = async (email, name) => {
+
+
+  const handleUser = async (email, name, picture) => {
+
     try {
       const user = await sendAPIRequest('user-get', 'POST', { id: email });
+      console.log(user.id);
+      //const withPic = await sendAPIRequest('profile-url-upd', 'PATCH', {user_id: user.id, profile_url: picture});
+      //console.log(withPic);
       login(user); // Update context
       navigate('/home'); // Navigate to home page
     } catch {
       console.log('User not found, adding user...');
       try {
-        const newUser = await sendAPIRequest('user-add', 'POST', { id: email, name });
-        login(newUser); // Update context
+        const newUser = await sendAPIRequest('user-add', 'POST', { id: email, name: name });
+        //const withPic = await sendAPIRequest('profile-url-upd', 'PATCH', {user_id: newUser.id, profile_url: picture});
+        //login(withPic); // Update context
         navigate('/home'); // Navigate to home page
       } catch (error) {
         console.error('Error during user addition:', error);
@@ -54,14 +60,12 @@ export default function Login() {
         method: 'GET',
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-
       if (!response.ok) {
         throw new Error(`Google API error! Status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('Google User Info:', data);
-      await handleUser(data.email, data.name);
+      await handleUser(data.email, data.name, data.picture);
     } catch (error) {
       console.error('Error fetching Google user info:', error);
     }
