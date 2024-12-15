@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../assets/page/searchFriend.css";
 import ToggleMenu from "./ToggleMenu";
+import { AuthContext } from "../context/AuthContext";
 function SearchFriend() {
+  const { user } = useContext(AuthContext);
   const [isInviting, setIsInviting] = useState(false);
   const [searchMail, setSearchMail] = useState("");
   const [searchList, setSearchList] = useState([]);
@@ -56,9 +58,11 @@ function SearchFriend() {
           <div key={info.id} className="friendName"></div>
           <img src={info.profile} alt="you" className="you" />
           <div className="friendName">{info.id}</div>
-          <button className="sendInvite" onClick={inviteClick}>
-            {isInviting ? "等待中..." : "送出邀請"}
-          </button>
+          {(info.id !== user.id) ? 
+            (<button className="sendInvite" onClick={inviteClick}>
+              {isInviting ? "等待中..." : "送出邀請"} {console.log(user.id + info.id)}
+            </button>
+            ):null}
           </div>
           </>
         ))}
