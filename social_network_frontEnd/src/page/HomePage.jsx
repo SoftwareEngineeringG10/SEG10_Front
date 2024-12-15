@@ -8,7 +8,7 @@ function HomePage() {
   const { user, logout } = useContext(AuthContext); // Access user and logout from context
   const navigate = useNavigate();
   const [selectedChat, setSelectedChat] = useState(null);
-  console.log(user);
+  //console.log(user);
   // Handle logout functionality
   const handleLogout = () => {
     logout(); // Clear user from context and localStorage

@@ -17,7 +17,7 @@ const JoinChat = ({ onJoinChat }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ chat_id: chatID, user_id: user.id }),
+          body: JSON.stringify({ chat_id: chatID, member_id: user.id }),
         }
       );
 

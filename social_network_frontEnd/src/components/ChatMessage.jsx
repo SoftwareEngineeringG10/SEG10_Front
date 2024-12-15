@@ -37,17 +37,79 @@ function ChatMessage({ chat, chatfunc }) {
     }
   };
 
+  // Fetch messages and members on initial render
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch messages
+        const fetchedMessages = await Promise.all(
+          chat.Contents?.map(async (msgId) => {
+            try {
+              const response = await fetch("https://swep.hnd1.zeabur.app/msg/api/msg-get", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: msgId }),
+              });
+              if (response.ok) {
+                return response.json();
+              } else {
+                console.error(`Failed to fetch message with ID ${msgId}`);
+                return null;
+              }
+            } catch (error) {
+              console.error(`Error fetching message with ID ${msgId}:`, error);
+              return null;
+            }
+          }) || []
+        );
+        setMessages(fetchedMessages.filter(Boolean));
+
+        // Fetch members
+        const fetchedUsers = await Promise.all(
+          chat.Members?.map(async (memID) => {
+            try {
+              const response = await fetch("https://swep.hnd1.zeabur.app/user/api/user-get", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: memID }),
+              });
+              if (response.ok) {
+                return response.json();
+              } else {
+                console.error(`Failed to fetch user with ID ${memID}`);
+                return null;
+              }
+            } catch (error) {
+              console.error(`Error fetching user with ID ${memID}:`, error);
+              return null;
+            }
+          }) || []
+        );
+        setMembers(fetchedUsers.filter(Boolean));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+
+    fetchAllData();
+  }, [chat.Contents, chat.Members]);
+
   const getMsgs = async () => {
     console.log('initial message');
     try {
       if (chat.Contents && chat.Contents.length > 0) {
         const fetchedMessages = [];
-        console.log('get message');
-        console.log('user: ', user.id);
-        console.log('room: ', chat.ID);
-        console.log(chat.Contents);
+        // console.log('get message');
+        // console.log('user: ', user.id);
+        // console.log('room: ', chat.ID);
+        // console.log(chat.Contents);
         for (const msgId of chat.Contents) {
-          console.log(msgId);
+          // console.log(msgId);
           const message = await fetchMessage(msgId);  // 使用公共函式
           if (message) {
             fetchedMessages.push(message);
@@ -98,14 +160,14 @@ function ChatMessage({ chat, chatfunc }) {
       socket.disconnect();
       socket.connect();
       socket.emit('join_room', chat.ID);
-      console.log('join ', chat.ID);
-      console.log(chat.Contents);
+      // console.log('join ', chat.ID);
+      // console.log(chat.Contents);
     }
 
     // 接收訊息
     const handleReceiveMessage = (data) => {
-      console.log('handle recieve');
-      console.log(data);
+      // console.log('handle recieve');
+      // console.log(data);
       
       setMessages((prev) => {
         const updatedMessages = [...prev, data];
@@ -113,7 +175,7 @@ function ChatMessage({ chat, chatfunc }) {
         return updatedMessages;
       });
 
-      console.log(chat.Contents);
+      // console.log(chat.Contents);
     };
 
     socket.on('receive_message', handleReceiveMessage);
@@ -153,9 +215,9 @@ function ChatMessage({ chat, chatfunc }) {
             else{
               console.log('socket send');
               const msgData = { room: chat.ID, author: user.id, msg: newMessage, data: data};
-              console.log('roomName:', chat.ID);
-              console.log(msgData);
-              console.log('massage: ', messages);
+              // console.log('roomName:', chat.ID);
+              // console.log(msgData);
+              // console.log('massage: ', messages);
               socket.emit('send_message', msgData);
             }
           } catch (error) {
