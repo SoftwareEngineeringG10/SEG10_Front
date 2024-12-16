@@ -26,7 +26,7 @@ const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat }) => {
         <div className="chatInfo-content" ref={ChatInfoCloseRef}>
         <ShowChatRoomId chat={chat} />
         <hr />
-        <EditChatRoom />
+        <EditChatRoom chat={chat}/>
         <hr />
         <DeleteChatRoom />
         </div>
