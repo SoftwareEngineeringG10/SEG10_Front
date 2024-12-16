@@ -5,7 +5,7 @@ import "boxicons";
 import "../assets/components/chatMessage.css";
 import io from 'socket.io-client';
 
-const socket = io('https://socket-server.zeabur.app');
+const socket = io('https://swep-socket-server.zeabur.app');
 
 function ChatMessage({ chat, chatfunc }) {
   const { user } = useContext(AuthContext);
