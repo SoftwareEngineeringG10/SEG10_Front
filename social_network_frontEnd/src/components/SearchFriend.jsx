@@ -24,8 +24,7 @@ const fetchAPI = async (url, method = "GET", body = null, headers = {}) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error("Fetch error:", error.message);
     throw error;
@@ -33,89 +32,21 @@ const fetchAPI = async (url, method = "GET", body = null, headers = {}) => {
 };
 
 function SearchFriend() {
-  const { user } = useContext(AuthContext);
+  const { user, updateUserNotifs } = useContext(AuthContext);
   const [isInviting, setIsInviting] = useState(false);
   const [searchMail, setSearchMail] = useState("");
   const [searchList, setSearchList] = useState([]);
   const [friendRequest, setFriendRequest] = useState([]);
-  const [frResponse, setFrResponse] = useState([]);
+
   useEffect(() => {
-    console.log(searchList);
-  }, [searchList]);
-  useEffect(() => {
-    requestsNotif();
-  }, []);
-
-  //request notif get
-  const notifGet = async (n_id) => {
-    const url = "https://swep.hnd1.zeabur.app/msg/api/notif-get";
-    const body = { id: n_id };
-
-    try {
-      const data = await fetchAPI(url, "POST", body);
-      return data;
-    } catch (error) {
-      console.error("Error with notif-get:", error);
-      return null;
+    if (user) {
+      requestsNotif();
     }
-  };
+    console.log(user);
+    console.log(isInviting);
+    console.log(friendRequest);
+  }, [user]);
 
-  const notifDelete = async (u_id, n_id) => {
-    const urlUser = "https://swep.hnd1.zeabur.app/user/api/notif-remove";
-    const urlMsg = "https://swep.hnd1.zeabur.app/msg/api/notif-del";
-  
-    const bodyUser = { user_id: u_id, notif_id: n_id };
-    const bodyMsg = { id: n_id };
-  
-    try {
-      // Call the user service
-      await fetchAPI(urlUser, "PATCH", bodyUser);
-  
-      // Call the message service
-      await fetchAPI(urlMsg, "DELETE", bodyMsg);
-  
-      console.log("Notification deleted successfully from both services");
-    } catch (error) {
-      console.error("Error during notification delete:", error);
-    }
-  };
-  
-  const notifAdd = async (id, title) => {
-    const urlUser = "https://swep.hnd1.zeabur.app/user/api/notif-add";
-    const urlMsg = "https://swep.hnd1.zeabur.app/msg/api/notif-create";
-  
-    try {
-      // Create body for the message service
-      const bodyMsg = {
-        user_id: title === "request" ? user.id : id,
-        title: title,
-        content: title === "request" ? id : user.id,
-      };
-  
-      // Call the message service to create a notification
-      const data = await fetchAPI(urlMsg, "POST", bodyMsg);
-  
-      if (!data || !data.id) {
-        throw new Error("Failed to retrieve notification ID from the message service");
-      }
-  
-      const n_id = data.id;
-  
-      // Create body for the user service
-      const bodyUser = {
-        user_id: title === "request" ? user.id : id,
-        notif_id: n_id,
-      };
-  
-      // Call the user service to add the notification
-      await fetchAPI(urlUser, "PATCH", bodyUser);
-  
-      console.log("Notification added successfully from both services");
-    } catch (error) {
-      console.error("Error during notification addition:", error.message || error);
-    }
-  };
-  
   const userGet = async (email) => {
     const url = "https://swep.hnd1.zeabur.app/user/api/user-get";
     const bodyUser = { id: email };
@@ -132,10 +63,77 @@ function SearchFriend() {
       return null;
     }
   };
-  
 
+  const notifGet = async (n_id) => {
+    const url = "https://swep.hnd1.zeabur.app/msg/api/notif-get";
+    try {
+      return await fetchAPI(url, "POST", { id: n_id });
+    } catch (error) {
+      console.error("Error with notif-get:", error);
+      return null;
+    }
+  };
+
+  const notifDelete = async (u_id, n_id) => {
+    const urlUser = "https://swep.hnd1.zeabur.app/user/api/notif-remove";
+    const urlMsg = "https://swep.hnd1.zeabur.app/msg/api/notif-del";
+
+    try {
+      await fetchAPI(urlUser, "PATCH", { user_id: u_id, notif_id: n_id });
+      await fetchAPI(urlMsg, "DELETE", { id: n_id });
+      console.log("Notification deleted successfully from both services");
+
+      // Update user state to reflect notification removal
+      const updatedNotifs = user.notifs.filter((notif) => notif !== n_id);
+      updateUserNotifs(updatedNotifs[0]);
+    } catch (error) {
+      console.error("Error during notification delete:", error);
+    }
+  };
+
+  const notifAdd = async (id, title) => {
+    const urlUser = "https://swep.hnd1.zeabur.app/user/api/notif-add";
+    const urlMsg = "https://swep.hnd1.zeabur.app/msg/api/notif-create";
+
+    try {
+      const bodyMsg = {
+        user_id: title === "request" ? user.id : id,
+        title,
+        content: title === "request" ? id : user.id,
+      };
+      const data = await fetchAPI(urlMsg, "POST", bodyMsg);
+
+      if (!data?.id) throw new Error("Failed to retrieve notification ID");
+
+      const bodyUser = {
+        user_id: title === "request" ? user.id : id,
+        notif_id: data.id,
+      };
+      await fetchAPI(urlUser, "PATCH", bodyUser);
+
+      updateUserNotifs(data.id);
+      console.log(user);
+      console.log("Notification added successfully to both services");
+    } catch (error) {
+      console.error("Error during notification addition:", error);
+    }
+  };
+
+  const requestsNotif = async () => {
+    try {
+      const notifications = await Promise.all(
+        user.notifs.map(async (notif) => {
+          const detail = await notifGet(notif);
+          return detail?.title === "request" ? { id: detail.description, notif_id: notif } : null;
+        })
+      );
+      setFriendRequest(notifications.filter(Boolean));
+    } catch (error) {
+      console.error("Error fetching friend requests:", error);
+    }
+  };
+  
   const responseNotif = async (data) => {
-    setFrResponse([]); // Reset before fetching new responses
   
     if (!data || !data.notifs) {
       console.error("responseNotif: data or data.notifs is undefined");
@@ -149,109 +147,68 @@ function SearchFriend() {
       }
     }
   };
-  
-
-  const requestsNotif = async () => {
-    setFriendRequest([]); // Reset before fetching new requests
-    const requests = [];
-
-    for (const notif of user.notifs) {
-      const detail = await notifGet(notif);
-      if (detail && detail.title === "request") {
-        requests.push({ id: detail.description, notif_id: notif });
-      }
-    }
-
-    setFriendRequest(requests);
-  };
-
   const inviteClick = async (r_id) => {
-    const n = friendRequest.filter((request) => request.id === r_id);
-  
-    if (isInviting) {
-      if (n.length > 0) {
-        await notifDelete(user.id ,n[0].notif_id);
-        const data = await userGet(n[0].id);
-        if (data) {
-          console.log(data);
-          await responseNotif(data);
-        } else {
-          console.error("inviteClick: userGet returned invalid data");
-        }
-      }
-    }else{
-      await notifAdd(r_id, "request"); //user request id
-      await notifAdd(r_id, "response"); //id response user
-    }
-    setIsInviting((prev) => !prev);
-  };
-  
-  const handleSearch = async() => {
     try {
-      console.log(searchMail);
-      const response = await fetch('https://swep.hnd1.zeabur.app/user/api/user-get', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: searchMail}),
-      })
-      
-
-      if (response.ok) {
-        const result = await response.json();
-        setSearchList((prev) => [result]);
-        console.log(friendRequest);
-        setIsInviting(false); //預設為不是
-        // Check if friendRequest array contains the result.id
-        const isRequestPending = friendRequest.some((request) => request.id === result.id);
-        
-        // Update state based on the result
-        setIsInviting(isRequestPending);
-        setSearchMail("");
+      const currentRequest = friendRequest.find((request) => request.id === r_id);
+      console.log(currentRequest);
+      if (currentRequest) {
+        await notifDelete(user.id, currentRequest.notif_id);
+        const data = await userGet(currentRequest.id);
+        await responseNotif(data);
       } else {
-        alert("此人不存在");
-        setSearchMail("");
+        await notifAdd(r_id, "request");
+        await notifAdd(r_id, "response");
+        
       }
+      
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error during inviteClick:", error);
+    } finally {
+      
+      setIsInviting((prev) => !prev);
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      const data = await fetchAPI("https://swep.hnd1.zeabur.app/user/api/user-get", "POST", { id: searchMail });
+      setSearchList([data]);
+
+      const isRequestPending = friendRequest.some((request) => request.id === data.id);
+      setIsInviting(isRequestPending);
+    } catch (error) {
+      alert("此人不存在或請求失敗");
+    } finally {
       setSearchMail("");
-    }                 
-    
-  }
+    }
+  };
+
   return (
     <>
       <ToggleMenu />
       <div className="SearchFriend-container">
         <h1 className="title">好友搜尋</h1>
         <div className="field">
-          <input 
+          <input
             placeholder="搜尋用戶..."
             type="text"
             value={searchMail}
             onChange={(e) => setSearchMail(e.target.value)}
-          ></input>
+          />
           <button className="searchButton" onClick={handleSearch}></button>
         </div>
-        <hr></hr>
-        
+        <hr />
         {searchList.map((info) => (
-          <>
-          <div className="friend">
-          <div key={info.id} className="friendName"></div>
-          <img src={info.profile} alt="you" className="you" />
-          <div className="friendName">{info.id}</div>
-          {(info.id !== user.id) ? 
-            (<button className="sendInvite" onClick={() => inviteClick(info.id)}>
-              {isInviting ? "等待中..." : "送出邀請"}
-            </button>
-            ):null}
+          <div key={info.id} className="friend">
+            <img src={info.profile} alt="profile" className="you" />
+            <div className="friendName">{info.id}</div>
+            {info.id !== user.id && (
+              <button className="sendInvite" onClick={() => inviteClick(info.id)}>
+                {isInviting ? "等待中..." : "送出邀請"}
+              </button>
+            )}
           </div>
-          </>
         ))}
-        
-        
-        
       </div>
     </>
   );
