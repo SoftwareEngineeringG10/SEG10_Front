@@ -110,8 +110,7 @@ function SearchFriend() {
         notif_id: data.id,
       };
       await fetchAPI(urlUser, "PATCH", bodyUser);
-
-      updateUserNotifs(data.id);
+      title === "request" ? updateUserNotifs(data.id) : null;
       console.log(user);
       console.log("Notification added successfully to both services");
     } catch (error) {
