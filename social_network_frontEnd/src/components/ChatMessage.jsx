@@ -267,9 +267,7 @@ function ChatMessage({ chat, chatfunc }) {
                     alt={member.name || "Unknown"}
                     className="you"
                   />
-                  <span>
-                    {message.content}
-                  </span>
+                  <span> {message.content} </span>
                 </div>
               );
             })}
