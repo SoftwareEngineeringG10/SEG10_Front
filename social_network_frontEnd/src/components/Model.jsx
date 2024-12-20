@@ -21,7 +21,7 @@ const Modal = ({ isOpen, onClose, children , onAddChat, onJoinChat}) => {
     <div className="modal-overlay">
       <div className="modal-content" ref={modalCloseRef}>
         <AddChat onAddChat={onAddChat}/>
-        <hr />
+        <hr className="hrline"/>
         <JoinChat onJoinChat={onJoinChat}/>
       </div>
     </div>

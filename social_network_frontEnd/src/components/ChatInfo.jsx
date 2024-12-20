@@ -25,9 +25,9 @@ const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat }) => {
       <div className="chatInfo-overlay">
         <div className="chatInfo-content" ref={ChatInfoCloseRef}>
         <ShowChatRoomId chat={chat} />
-        <hr />
+        <hr className="hrline"/>
         <EditChatRoom chat={chat}/>
-        <hr />
+        <hr className="hrline"/>
         <DeleteChatRoom />
         </div>
       </div>

@@ -17,3 +17,7 @@
     top: 0;
   }
   
+  .hrline {
+    border-color: rgba(0, 0, 0, 0.5);
+  }
+  
