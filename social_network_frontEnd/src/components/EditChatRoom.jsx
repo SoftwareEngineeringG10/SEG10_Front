@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import "../assets/components/editChatRoom.css";
-const EditChatRoom = (chat) => {
+const EditChatRoom = ({chat, onCloseChatInfo}) => {
   const [editChatRoomName, seteditChatRoomName] = useState(false);
   const [editChatName, seteditChatName] = useState("");
-  const id = chat.chat.ID;
+  const id = chat.ID;
   const handleEditChatName = async () => {
     try {
       // Example API call to save chat room in the backend
@@ -55,8 +55,26 @@ const EditChatRoom = (chat) => {
               value={editChatName}
               onChange={(e) => seteditChatName(e.target.value)}
             />
-            <button onClick={() => seteditChatRoomName(false)} className="editCancel">取消</button>
-            <button onClick={handleEditChatName} className="editAccept">儲存</button>
+            <button 
+              onClick={() => {
+                  seteditChatRoomName(false);
+                  onCloseChatInfo();
+                }
+              }
+              className="editCancel"
+            >
+              取消
+            </button>
+            <button 
+              onClick={() => {
+                  onCloseChatInfo();
+                  handleEditChatName();
+                }
+              } 
+              className="editAccept"
+            >
+            儲存
+            </button>
           </div>
         </div>
       )}
