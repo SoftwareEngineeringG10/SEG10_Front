@@ -33,14 +33,8 @@ const fetchAPI = async (url, method = "GET", body = null, headers = {}) => {
 
 function FriendRequest() {
   const {user, updateUserNotifs} = useContext(AuthContext);
-
-  const [fndRsps, setFndRsps] = useState([
-    { name: "企鵝四號", id: 0 },
-    { name: "企鵝五號", id: 1 },
-    { name: "企鵝六號", id: 2 },
-    { name: "企鵝七號", id: 3 },
-    { name: "企鵝八號", id: 4 },
-  ]);
+  const [friend, setFriend] = useState([]);
+  const [fndRsps, setFndRsps] = useState([]);
   useEffect(() => {
     if (user) {
       responseNotif(user); // Fetch responses when the component loads
@@ -169,11 +163,31 @@ function FriendRequest() {
       // Filter out null values and update state
       const validResponses = friendResponses.filter(Boolean);
       setFndRsps(validResponses);
+  
       console.log("Fetched friend responses:", validResponses);
+  
+      // Fetch user details for each friend response
+      const fetchedFriends = await Promise.all(
+        validResponses.map(async (response) => {
+          try {
+            const userDetail = await userGet(response.name);
+            return userDetail || null; // Return user detail or null on failure
+          } catch (error) {
+            console.error("Error fetching user detail for:", response.name, error);
+            return null;
+          }
+        })
+      );
+  
+      // Filter out null values and update the `friend` state
+      setFriend((prev) => [...prev, ...fetchedFriends.filter(Boolean)]);
+  
+      console.log("Fetched user details:", fetchedFriends);
     } catch (error) {
       console.error("Error fetching friend responses:", error);
     }
   };
+  
   
 
   return (
@@ -183,26 +197,36 @@ function FriendRequest() {
         <h1 className="title">好友請求</h1>
         <hr />
         <div className="friend-requests">
-          {fndRsps.map((fndRsp) => (
-            <div key={fndRsp.id} className="friendrequest">
-              <img src="images/penguin-png.png" alt="Penguin" />
-              <div className="friendName">{fndRsp.name}</div>
-              <button
-                className="agree"
-                onClick={() => handleResponse(fndRsp.id, fndRsp.name, true)}
-              >
-              </button>
-              <button
-                className="disagree"
-                onClick={() => handleResponse(fndRsp.id, fndRsp.name, false)}
-              >
-              </button>
-            </div>
-          ))}
+          {fndRsps.map((fndRsp) => {
+            // Find the corresponding friend object
+            const matchingFriend = friend.find((fr) => fr.id === fndRsp.name);
+            return (
+              <div key={fndRsp.id} className="friendrequest">
+                <img
+                  src={matchingFriend?.profile || "images/default-penguin.png"} // Use the friend's image if available, otherwise fallback
+                  alt={matchingFriend?.name || "Unknown Friend"}
+                />
+                <div className="friendName">
+                  {matchingFriend?.name || fndRsp.name} {/* Use friend's name if available */}
+                </div>
+                <button
+                  className="agree"
+                  onClick={() => handleResponse(fndRsp.id, fndRsp.name, true)}
+                >
+                </button>
+                <button
+                  className="disagree"
+                  onClick={() => handleResponse(fndRsp.id, fndRsp.name, false)}
+                >
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
   );
+  
 }
 
 export default FriendRequest;

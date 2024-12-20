@@ -268,7 +268,7 @@ function ChatMessage({ chat, chatfunc }) {
                     className="you"
                   />
                   <span>
-                    {message.content}....{message.sender || "Unknown"}
+                    {message.content}
                   </span>
                 </div>
               );
