@@ -57,7 +57,7 @@ function UserProfilePage() {
         newuser.settings = result.settings;
         updateUser(newuser);
         showWebNotification("儲存成功！");
-
+        
         if (profileContainerRef.current) {
           profileContainerRef.current.scrollTop = 0;
         }
@@ -67,6 +67,8 @@ function UserProfilePage() {
       }
     } catch (error) {
       console.error("Error fetching child data:", error);
+    } finally {
+      alert("更改個人資料成功");
     }
   };
 
@@ -211,19 +213,11 @@ function UserProfilePage() {
           ></textarea>
         </div>
         <div className="save-container">
-          <button className="save-button" onClick={handleSaveChanges}>
+          <button className="save-button" onClick={handleSaveChanges} >
             儲存變更
           </button>
         </div>
       </div>
-      
-      {/* 通知區塊 */}
-      {showNotification && (
-        <div className="notification">
-          <p>{notificationMessage}</p>
-          <button onClick={hideWebNotification}>確定</button>
-        </div>
-      )}
     </>
   );
 }
