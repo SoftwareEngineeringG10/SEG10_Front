@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import ToggleMenu from "./ToggleMenu";
 import { AuthContext } from "../context/AuthContext";
 import "../assets/page/userProfile.css";
@@ -11,6 +11,20 @@ function UserProfilePage() {
   const [tel, settel] = useState("");
   const [addr, setAddr] = useState("");
   const [txt, setTxt] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
+  const profileContainerRef = useRef(null);
+
+  // 顯示網頁內通知的函式
+  const showWebNotification = (message) => {
+    setNotificationMessage(message);
+    setShowNotification(true);
+  };
+
+  // 隱藏通知的函式
+  const hideWebNotification = () => {
+    setShowNotification(false);
+  };
 
   const handleSaveChanges = async () => {
     const userData = JSON.stringify({ 
@@ -34,12 +48,23 @@ function UserProfilePage() {
           body: userData,
         }
       );
-      const result = await response.json();
-      console.log('save response:', result.settings);
-      console.log(user);
-      const newuser = user;
-      newuser.settings = result.settings;
-      updateUser(newuser);
+
+      if(response.ok){
+        const result = await response.json();
+        console.log('save response:', result.settings);
+        console.log(user);
+        const newuser = user;
+        newuser.settings = result.settings;
+        updateUser(newuser);
+        showWebNotification("儲存成功！");
+
+        if (profileContainerRef.current) {
+          profileContainerRef.current.scrollTop = 0;
+        }
+      }
+      else {
+        console.error("Error saving data:", response);
+      }
     } catch (error) {
       console.error("Error fetching child data:", error);
     }
@@ -77,7 +102,7 @@ function UserProfilePage() {
   return (
     <>
       <ToggleMenu />
-      <div className="profile-container">
+      <div className="profile-container" ref={profileContainerRef}>
         <h1 className="title">Setting</h1>
         <div className="setting">
           <label htmlFor="alias">姓名</label>
@@ -191,6 +216,14 @@ function UserProfilePage() {
           </button>
         </div>
       </div>
+      
+      {/* 通知區塊 */}
+      {showNotification && (
+        <div className="notification">
+          <p>{notificationMessage}</p>
+          <button onClick={hideWebNotification}>確定</button>
+        </div>
+      )}
     </>
   );
 }
