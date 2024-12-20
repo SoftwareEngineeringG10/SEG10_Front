@@ -83,7 +83,7 @@ export default function FriendList() {
                     <div className="friendName">
                       {friend.name || "Loading..."}
                     </div>
-                    <RemoveFriend friendId={friend} onFriendRemoved={handleRemove} />
+                    <RemoveFriend friendId={friend.id} onFriendRemoved={handleRemove} />
                   </div>
                   <hr className="Line" />
                 </React.Fragment>
