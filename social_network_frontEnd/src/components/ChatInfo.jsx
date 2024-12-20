@@ -11,6 +11,7 @@ const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat }) => {
   const closeFloatChatInfo = (event) => {
     if(ChatInfoCloseRef.current && !ChatInfoCloseRef.current.contains(event.target)){
       onCloseChatInfo();
+      console.log('onCloseChatInfo:', typeof onCloseChatInfo);
     }
   };
   useEffect(() => {
@@ -24,9 +25,9 @@ const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat }) => {
     <div>
       <div className="chatInfo-overlay">
         <div className="chatInfo-content" ref={ChatInfoCloseRef}>
-        <ShowChatRoomId chat={chat} />
+        <ShowChatRoomId chat={chat} onCloseChatInfo={onCloseChatInfo}/>
         <hr className="hrline"/>
-        <EditChatRoom chat={chat}/>
+        <EditChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo}/>
         <hr className="hrline"/>
         <DeleteChatRoom />
         </div>

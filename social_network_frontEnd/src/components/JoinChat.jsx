@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import "../assets/components/JoinChat.css";
 
-const JoinChat = ({ onJoinChat }) => {
+const JoinChat = ({ onJoinChat, onClose}) => {
   const [showModal, setShowModal] = useState(false);
   const [chatID, setChatID] = useState("");
   const { user } = useContext(AuthContext);
@@ -26,6 +26,7 @@ const JoinChat = ({ onJoinChat }) => {
         onJoinChat(newChat); // Notify parent of new chat (object from chat service)
         setChatID(""); // Reset input
         setShowModal(false); // Close modal
+        onClose();
       } else {
         alert("create chat failed");
         console.error("Failed to create chat room.");
@@ -51,8 +52,24 @@ const JoinChat = ({ onJoinChat }) => {
               onChange={(e) => setChatID(e.target.value)}
               placeholder="Enter ID"
             />
-            <button onClick={() => setShowModal(false)} className="joinCancel">取消</button>
-            <button onClick={handleJoinChat} className="joinAccept">加入聊天室</button>
+            <button onClick={() => {
+                  setShowModal(false);
+                  onClose();
+                }
+              } 
+              className="joinCancel"
+            >
+            取消
+            </button>
+            <button onClick={() => {
+                  handleJoinChat();
+                  //onClose();
+                }
+              } 
+              className="joinAccept"
+            >
+            加入聊天室
+            </button>
           </div>
         </div>
       )}
