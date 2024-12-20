@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import "../assets/components/AddChat.css"
-const AddChat = ({ onAddChat }) => {
+const AddChat = ({ onAddChat, onClose}) => {
   const [showModal, setShowModal] = useState(false);
   const [chatName, setChatName] = useState("");
   const { user } = useContext(AuthContext);
@@ -56,9 +56,24 @@ const AddChat = ({ onAddChat }) => {
               onChange={(e) => setChatName(e.target.value)}
               placeholder="Enter chat name"
             />
-            <button onClick={() => setShowModal(false)} className="createCancel">取消</button>
-            <button onClick={handleAddChat} className="createAccept">創建聊天室</button>
-            
+            <button onClick={() => {
+                  setShowModal(false);
+                  onClose();
+                }
+              } 
+              className="createCancel"
+            >
+            取消
+            </button>
+            <button onClick={() => {
+                  onClose();
+                  handleAddChat();
+                }
+              } 
+              className="createAccept"
+            >
+            創建聊天室
+            </button>
           </div>
         </div>
       )}

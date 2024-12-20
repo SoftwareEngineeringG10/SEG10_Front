@@ -20,9 +20,9 @@ const Modal = ({ isOpen, onClose, children , onAddChat, onJoinChat}) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content" ref={modalCloseRef}>
-        <AddChat onAddChat={onAddChat}/>
+        <AddChat onAddChat={onAddChat} onClose={onClose}/>
         <hr className="hrline"/>
-        <JoinChat onJoinChat={onJoinChat}/>
+        <JoinChat onJoinChat={onJoinChat} onClose={onClose}/>
       </div>
     </div>
   );
