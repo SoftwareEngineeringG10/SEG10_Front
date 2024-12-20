@@ -201,7 +201,7 @@ function SearchFriend() {
           <div key={info.id} className="friend">
             <img src={info.profile} alt="profile" className="you" />
             <div className="friendNameSearch">{info.id}</div>
-            {info.id !== user.id && (
+            {info.id !== user.id && !user.friends.includes(info.id) && (
               <button className="sendInvite" onClick={() => inviteClick(info.id)}>
                 {isInviting ? "等待中..." : "送出邀請"}
               </button>
