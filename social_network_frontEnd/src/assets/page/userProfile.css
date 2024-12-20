@@ -119,7 +119,7 @@ input[type="radio"]:checked + .gender {
 }
 
 ::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  filter: brightness(0);
 }
 
 .fixed-email {
