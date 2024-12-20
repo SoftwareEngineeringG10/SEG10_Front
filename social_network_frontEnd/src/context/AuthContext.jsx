@@ -45,6 +45,17 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
+  const updateUserNotifs = (newNotif) => {
+    setUser((prevUser) => {
+      const updatedUserNotifs = {
+        ...prevUser,
+        notifs:[...prevUser.notifs ,newNotif], // Replace the notifs array with the updated version
+      };
+      localStorage.setItem('user', JSON.stringify(updatedUserNotifs)); // Persist the changes
+      return updatedUserNotifs;
+    });
+  };
+
   const synchronizeChatMembership = async (chatId) => {
     if (!user) return;
     console.log(user.chats);
@@ -65,7 +76,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser , updateUserNotifs }}>
       {children}
     </AuthContext.Provider>
   );
