@@ -1,83 +1,194 @@
-import React from "react";
-import ToggleMenu from "../components/ToggleMenu";
+import React, { useState, useContext, useEffect } from "react";
+import ToggleMenu from "./ToggleMenu";
+import { AuthContext } from "../context/AuthContext";
 import "../assets/page/userProfile.css";
+
 function UserProfilePage() {
+  const { user, updateUser } = useContext(AuthContext);
+  const [alias, setAlias] = useState("");
+  const [birth, setBirth] = useState("");
+  const [gen, setGen] = useState("");
+  const [tel, settel] = useState("");
+  const [addr, setAddr] = useState("");
+  const [txt, setTxt] = useState("");
+
+  const handleSaveChanges = async () => {
+    const userData = JSON.stringify({ 
+      user_id: user.id, 
+      alias: alias,
+      birth: birth,
+      gen: gen,
+      tel: tel,
+      addr: addr,
+      txt: txt,
+    })
+    console.log("準備送出的資料：", userData);
+    try {
+      const response = await fetch(
+        "https://swep.hnd1.zeabur.app/user/api/save-setting",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: userData,
+        }
+      );
+      const result = await response.json();
+      console.log('save response:', result.settings);
+      console.log(user);
+      const newuser = user;
+      newuser.settings = result.settings;
+      updateUser(newuser);
+    } catch (error) {
+      console.error("Error fetching child data:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://swep.hnd1.zeabur.app/user/api/user-get",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: user.id }),
+          }
+        );
+        const result = await response.json();
+        console.log(result.settings);
+        setAlias(result.settings[0]);
+        setBirth(result.settings[1]);
+        setGen(result.settings[2]);
+        settel(result.settings[3]);
+        setAddr(result.settings[4]);
+        setTxt(result.settings[5]);
+      } catch (error) {
+        console.error("Error fetching child data:", error);
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
   return (
     <>
       <ToggleMenu />
       <div className="profile-container">
         <h1 className="title">Setting</h1>
         <div className="setting">
-          <label for="name">姓名</label>
-          <input type="text" id="name" name="name" placeholder="文字輸入區" />
+          <label htmlFor="alias">姓名</label>
+          <input
+            type="text"
+            id="alias"
+            name="alias"
+            placeholder="文字輸入區"
+            value={alias}
+            onChange={(e) => setAlias(e.target.value)}
+          />
         </div>
         <div className="setting">
-          <label for="birthday">生日</label>
-          <input type="date" id="birthday"></input>
+          <label htmlFor="birth">生日</label>
+          <input
+            type="date"
+            id="birth"
+            value={birth}
+            onChange={(e) => setBirth(e.target.value)}
+          />
         </div>
         <div className="sex-setting">
           <label className="sexlabel">性別</label>
           <div className="sex">
-            <label for="man" className="radiobutton">
-              <input type="radio" name="sex" id="man"></input>
+            <label htmlFor="man" className="radiobutton">
+              <input
+                type="radio"
+                name="gen"
+                id="man"
+                value="male"
+                checked={gen === "male"}
+                onChange={(e) => setGen(e.target.value)}
+              />
               <span className="gender">男</span>
             </label>
-            <label for="woman" className="radiobutton">
-              <input type="radio" name="sex" id="woman"></input>
+            <label htmlFor="woman" className="radiobutton">
+              <input
+                type="radio"
+                name="gen"
+                id="woman"
+                value="female"
+                checked={gen === "female"}
+                onChange={(e) => setGen(e.target.value)}
+              />
               <span className="gender">女</span>
             </label>
-            <label for="lgbtq" className="radiobutton">
-              <input type="radio" name="sex" id="lgbtq"></input>
+            <label htmlFor="lgbtq" className="radiobutton">
+              <input
+                type="radio"
+                name="gen"
+                id="lgbtq"
+                value="Non-binary gender"
+                checked={gen === "Non-binary gender"}
+                onChange={(e) => setGen(e.target.value)}
+              />
               <span className="gender">非二元性別</span>
             </label>
-            <label for="no" className="radiobutton">
-              <input type="radio" name="sex" id="no"></input>
+            <label htmlFor="no" className="radiobutton">
+              <input
+                type="radio"
+                name="gen"
+                id="no"
+                value="no"
+                checked={gen === "no"}
+                onChange={(e) => setGen(e.target.value)}
+              />
               <span className="gender">不願透漏</span>
             </label>
           </div>
         </div>
         <div className="setting">
-          <label for="nickname">顯示使用者名稱</label>
+          <label htmlFor="tel">電話</label>
+          <input
+            type="tel"
+            id="tel"
+            name="tel"
+            placeholder="文字輸入區"
+            value={tel}
+            onChange={(e) => settel(e.target.value)}
+          />
+        </div>
+        <div className="setting">
+          <label htmlFor="addr">地址</label>
           <input
             type="text"
-            id="nickname"
-            name="nickname"
+            id="addr"
+            name="addr"
             placeholder="文字輸入區"
+            value={addr}
+            onChange={(e) => setAddr(e.target.value)}
           />
         </div>
         <div className="setting">
-          <label for="phone">電話</label>
-          <input type="tel" id="phone" name="phone" placeholder="文字輸入區" />
+          <label htmlFor="email">電子郵箱</label>
+          <div className="fixed-email">{user.id}</div>
         </div>
         <div className="setting">
-          <label for="address">地址</label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            placeholder="文字輸入區"
-          />
-        </div>
-        <div className="setting">
-          <label for="email">電子郵箱</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="文字輸入區"
-          />
-        </div>
-        <div className="setting">
-          <label for="selfIntro">個人簡介</label>
+          <label htmlFor="txt">個人簡介</label>
           <textarea
-            id="selfIntro"
-            name="selfIntro"
+            id="txt"
+            name="txt"
             rows="4"
             placeholder="文字輸入區"
+            value={txt}
+            onChange={(e) => setTxt(e.target.value)}
           ></textarea>
         </div>
         <div className="save-container">
-          <button className="save-button">儲存變更</button>
+          <button className="save-button" onClick={handleSaveChanges}>
+            儲存變更
+          </button>
         </div>
       </div>
     </>
