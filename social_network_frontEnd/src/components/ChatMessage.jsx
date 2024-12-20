@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import ChatInfo from "./ChatInfo";
 import "boxicons";
-import "../assets/components/chatMessage.css";
+import "../assets/components/ChatMessage.css";
 import io from 'socket.io-client';
 
 const socket = io('https://swep-socket-server.zeabur.app');
