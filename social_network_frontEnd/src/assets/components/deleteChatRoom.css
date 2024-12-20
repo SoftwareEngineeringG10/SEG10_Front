@@ -1,0 +1,19 @@
+.deleteChatRoom {
+    background-color: #fff;
+    color: #FF0101;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    display: block;
+    width: 160px;
+    text-align: left;
+  }
+  
+  .deleteChatRoom:hover {
+    border: none;
+    background-color: #D9D9D9;
+  }
+  
+  .deleteChatRoom:focus {
+    outline: none;
+  }

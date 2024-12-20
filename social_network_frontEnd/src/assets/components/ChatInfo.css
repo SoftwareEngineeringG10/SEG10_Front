@@ -1,23 +1,22 @@
-.modal-overlay {
+.chatInfo-overlay {
     z-index: 1000;
     position: fixed;
-    left: 18vw;
-    top: 9vh;
+    right: 1vw;
+    top: 5vh;
     border: 0.5px solid #000;
     border-radius: 5px;
   }
   
-  .modal-content {
+  .chatInfo-content {
     background: white;
-    text-align: center;
+    width: 160px;
   }
   
-  .modal-content hr {
+  .chatInfo-content hr {
     position: relative;
     top: 0;
   }
-  
+
   .hrline {
     border-color: rgba(0, 0, 0, 0.5);
   }
-  

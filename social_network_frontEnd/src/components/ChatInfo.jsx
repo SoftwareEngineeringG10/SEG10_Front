@@ -1,24 +1,37 @@
-import React, { useContext, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React, { useContext, useState,useEffect,useRef } from "react";
+import { AuthContext } from "../context/AuthContext";
+import "../assets/components/ChatInfo.css";
+import ShowChatRoomId from "./ShowChatRoomId";
+import EditChatRoom from "./EditChatRoom";
+import DeleteChatRoom from "./DeleteChatRoom";
+const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat }) => {
+  if (!isChatInfoOpen) return null;
+  const { user } = useContext(AuthContext);
+  const ChatInfoCloseRef = useRef(null)
+  const closeFloatChatInfo = (event) => {
+    if(ChatInfoCloseRef.current && !ChatInfoCloseRef.current.contains(event.target)){
+      onCloseChatInfo();
+      console.log('onCloseChatInfo:', typeof onCloseChatInfo);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", closeFloatChatInfo);
 
-const ChatInfo = ({ onAddChat }) => {
-  const [showModal, setShowModal] = useState(false);
-  const {user} = useContext(AuthContext);
-
-
+    return () => {
+      document.removeEventListener("mousedown", closeFloatChatInfo);
+    };
+  }, []);
   return (
     <div>
-        <button onClick={() => setShowModal(true)}><box-icon type='solid' name='edit'></box-icon></button>
-
-      {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>join Chat ID:</h2>
-            <label>{user.chats[0]}</label>
-            <button onClick={() => setShowModal(false)}>X</button>
-          </div>
+      <div className="chatInfo-overlay">
+        <div className="chatInfo-content" ref={ChatInfoCloseRef}>
+        <ShowChatRoomId chat={chat} onCloseChatInfo={onCloseChatInfo}/>
+        <hr className="hrline"/>
+        <EditChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo}/>
+        <hr className="hrline"/>
+        <DeleteChatRoom />
         </div>
-      )}
+      </div>
     </div>
   );
 };
