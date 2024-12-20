@@ -226,7 +226,7 @@ function ChatAvatar({onSelectChat }) {
       ))}
       </div>
       <div className="homePageBottom">
-        <img src="images/penguin-png.png" alt="Penguin" />
+        <img src={user.profile} alt="Penguin" />
         <div className="myName">
           {user?.settings?.[0] && user.settings[0] !== "" ? user.settings[0] : user.name}
         </div>
