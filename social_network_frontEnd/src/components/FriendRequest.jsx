@@ -184,6 +184,7 @@ function FriendRequest() {
         <hr />
         <div className="friend-requests">
           {fndRsps.map((fndRsp) => (
+            <div>
             <div key={fndRsp.id} className="friendrequest">
               <img src="images/penguin-png.png" alt="Penguin" />
               <div className="friendName">{fndRsp.name}</div>
@@ -197,6 +198,8 @@ function FriendRequest() {
                 onClick={() => handleResponse(fndRsp.id, fndRsp.name, false)}
               >
               </button>
+            </div>
+            <hr />
             </div>
           ))}
         </div>

@@ -200,7 +200,7 @@ function SearchFriend() {
         {searchList.map((info) => (
           <div key={info.id} className="friend">
             <img src={info.profile} alt="profile" className="you" />
-            <div className="friendName">{info.id}</div>
+            <div className="friendNameSearch">{info.id}</div>
             {info.id !== user.id && (
               <button className="sendInvite" onClick={() => inviteClick(info.id)}>
                 {isInviting ? "等待中..." : "送出邀請"}
