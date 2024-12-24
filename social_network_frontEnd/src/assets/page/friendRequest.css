@@ -59,7 +59,7 @@ hr {
 .agree {
   width: 40px;
   height: 40px;
-  background-image: url("images/agree.PNG");
+  background-image: url("images/agree.png");
   background-size: cover;
   cursor: pointer;
   position: absolute;
@@ -80,7 +80,7 @@ hr {
 .disagree {
   width: 40px;
   height: 40px;
-  background-image: url("images/disagree.PNG");
+  background-image: url("images/disagree.png");
   background-size: cover;
   cursor: pointer;
   position: absolute;
