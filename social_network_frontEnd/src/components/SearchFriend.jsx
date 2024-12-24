@@ -194,7 +194,9 @@ function SearchFriend() {
             value={searchMail}
             onChange={(e) => setSearchMail(e.target.value)}
           />
-          <button className="searchButton" onClick={handleSearch}></button>
+          <button className="searchButton" onClick={handleSearch}>
+            <img src="images/search_icon.png"></img>
+          </button>
         </div>
         <hr />
         {searchList.map((info) => (

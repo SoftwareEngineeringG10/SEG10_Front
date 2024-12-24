@@ -44,20 +44,23 @@ hr {
   border-radius: 5px;
   background-color: #f9f9f9;
   color: #000;
+  z-index: 100;
 }
 
 .searchButton {
   width: 40px;
   height: 40px;
-  background-image: url("images/search_icon.png");
-  background-size: cover;
   cursor: pointer;
   border: #ddd;
+  background-color: #ffffff;
 }
 
-.searchButton:hover {
-  background-image: url("images/search_icon_black.png");
-  border: #ddd;
+.searchButton img {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .searchButton:focus {
