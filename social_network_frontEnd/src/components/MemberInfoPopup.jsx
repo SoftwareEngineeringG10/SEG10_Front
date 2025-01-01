@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/components/memberInfoPopup.css";
+import "../assets/components/MemberInfoPopup.css";
 
 const MemberInfoPopup = ({ member, onClose }) => {
   if (!member) return null;
