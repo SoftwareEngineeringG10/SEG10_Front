@@ -6,7 +6,7 @@ import ChatMessage from "./ChatMessage"; // Import ChatMessage
 import "../assets/components/ChatAvatar.css";
 import { AuthContext } from "../context/AuthContext";
 
-function ChatAvatar({onSelectChat }) {
+function ChatAvatar({SelectChat, onSelectChat }) {
   const { user, updateUser } = useContext(AuthContext);
   const [chatRoomsID, setChatRoomsID] = useState(user?.chats || []);
   const [chatRooms, setChatRooms] = useState([]); // Array of chat details
@@ -79,6 +79,15 @@ function ChatAvatar({onSelectChat }) {
     };
     fetchChatsOnMount();
   }, [user]);
+
+  useEffect(() => {
+    if (!SelectChat?.ID) return;
+    setChatRooms((prevChatRooms) =>
+      prevChatRooms.map((chat) =>
+        chat.ID === SelectChat.ID ? { ...chat, ...SelectChat } : chat
+      )
+    );
+  }, [SelectChat?.Name]);
 
   const handleAddChat = (newChat) => {
     if (chatRoomsID.includes(newChat.ID)) {
