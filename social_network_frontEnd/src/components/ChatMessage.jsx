@@ -135,7 +135,7 @@ function ChatMessage({ chat, chatfunc }) {
     };
   
     execute();
-  }, [chat]);
+  }, [chat.Contents]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -292,6 +292,7 @@ function ChatMessage({ chat, chatfunc }) {
             chat={chat}
             isChatInfoOpen={isChatInfoOpen}
             onCloseChatInfo={() => setChatInfoOpen(false)}
+            chatfunc = {chatfunc}
           ></ChatInfo>
         </>
       )}

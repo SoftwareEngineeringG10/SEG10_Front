@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import "../assets/components/editChatRoom.css";
-const EditChatRoom = ({chat, onCloseChatInfo}) => {
+const EditChatRoom = ({chat, onCloseChatInfo, chatfunc}) => {
   const [editChatRoomName, seteditChatRoomName] = useState(false);
   const [editChatName, seteditChatName] = useState("");
   const id = chat.ID;
@@ -26,6 +26,8 @@ const EditChatRoom = ({chat, onCloseChatInfo}) => {
         const newChatRoomName = await response.json();
         seteditChatName(""); // Reset input
         seteditChatRoomName(false); // Close modal
+        const newchat = {...chat, Name: editChatName};
+        chatfunc(newchat);
       } else {
         alert("rename chat failed");
         console.error("Failed to rename chat room.");
