@@ -26,5 +26,4 @@ jobs:
 
     - name: Run Load Test
       run: |
-        # Use absolute path to ensure the file is found
-        k6 run $SEG10_Front/social_network_frontEnd/tests/load-test.js
+        k6 run $GITHUB_WORKSPACE/social_network_frontEnd/tests/load-test.js
