@@ -4,7 +4,7 @@ import "../assets/components/ChatInfo.css";
 import ShowChatRoomId from "./ShowChatRoomId";
 import EditChatRoom from "./EditChatRoom";
 import DeleteChatRoom from "./DeleteChatRoom";
-const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat }) => {
+const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc }) => {
   if (!isChatInfoOpen) return null;
   const { user } = useContext(AuthContext);
   const ChatInfoCloseRef = useRef(null)
@@ -27,7 +27,7 @@ const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat }) => {
         <div className="chatInfo-content" ref={ChatInfoCloseRef}>
         <ShowChatRoomId chat={chat} onCloseChatInfo={onCloseChatInfo}/>
         <hr className="hrline"/>
-        <EditChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo}/>
+        <EditChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc}/>
         <hr className="hrline"/>
         <DeleteChatRoom />
         </div>

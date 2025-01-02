@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import ChatInfo from "./ChatInfo";
+import MemberInfoPopup from "./MemberInfoPopup";
 import "boxicons";
 import "../assets/components/ChatMessage.css";
 import io from 'socket.io-client';
@@ -14,6 +15,7 @@ function ChatMessage({ chat, chatfunc }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isChatInfoOpen, setChatInfoOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
   const messageListRef = useRef(null);
 
 
@@ -135,7 +137,7 @@ function ChatMessage({ chat, chatfunc }) {
     };
   
     execute();
-  }, [chat]);
+  }, [chat.Contents]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -235,6 +237,15 @@ function ChatMessage({ chat, chatfunc }) {
     setNewMessage("");
   };
 
+  const handleMemberClick = (member) => {
+    console.log('click info');
+    setSelectedMember(member);
+  };
+
+  const closePopup = () => {
+    setSelectedMember(null);
+  };
+
   return (
     <div className="chat-container">
       {loading ? (
@@ -266,12 +277,20 @@ function ChatMessage({ chat, chatfunc }) {
                     src={member.profile || "default-profile.png"}
                     alt={member.name || "Unknown"}
                     className="you"
+                    onClick={() => handleMemberClick(member)}
                   />
                   <span> {message.content} </span>
                 </div>
               );
             })}
           </div>
+          {/* Popup */}
+          {selectedMember && (
+            <MemberInfoPopup
+              member={selectedMember}
+              onClose={closePopup}
+            />
+          )}
           <div className="chat-input">
             <input
               type="text"
@@ -292,6 +311,7 @@ function ChatMessage({ chat, chatfunc }) {
             chat={chat}
             isChatInfoOpen={isChatInfoOpen}
             onCloseChatInfo={() => setChatInfoOpen(false)}
+            chatfunc = {chatfunc}
           ></ChatInfo>
         </>
       )}
