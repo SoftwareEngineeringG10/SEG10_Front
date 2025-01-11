@@ -29,7 +29,7 @@ const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc }) => {
         <hr className="hrline"/>
         <EditChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc}/>
         <hr className="hrline"/>
-        <DeleteChatRoom />
+        <DeleteChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo}/>
         </div>
       </div>
     </div>
