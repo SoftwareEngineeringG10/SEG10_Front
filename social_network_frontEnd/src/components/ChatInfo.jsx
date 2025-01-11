@@ -7,7 +7,7 @@ import DeleteChatRoom from "./DeleteChatRoom";
 const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc }) => {
   if (!isChatInfoOpen) return null;
   const { user } = useContext(AuthContext);
-  const ChatInfoCloseRef = useRef(null)
+  const ChatInfoCloseRef = useRef(null);
   const closeFloatChatInfo = (event) => {
     if(ChatInfoCloseRef.current && !ChatInfoCloseRef.current.contains(event.target)){
       onCloseChatInfo();
