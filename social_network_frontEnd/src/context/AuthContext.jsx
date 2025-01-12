@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('user-origin-profile', userData.picture);
     console.log(userData);
     setPicture(userData.picture || null);
   };
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('user-origin-profile');
     setPicture(null);
   };
 
