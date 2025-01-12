@@ -11,6 +11,7 @@ function UserProfilePage() {
   const [tel, settel] = useState("");
   const [addr, setAddr] = useState("");
   const [txt, setTxt] = useState("");
+  const [profile, setProFile] = useState(user?.profile || "");
   const [notificationMessage, setNotificationMessage] = useState("");
   const [showNotification, setShowNotification] = useState(false);
   const profileContainerRef = useRef(null);
@@ -35,7 +36,7 @@ function UserProfilePage() {
       tel: tel,
       addr: addr,
       txt: txt,
-    })
+    });
     console.log("準備送出的資料：", userData);
     try {
       const response = await fetch(
@@ -55,6 +56,43 @@ function UserProfilePage() {
         console.log(user);
         const newuser = user;
         newuser.settings = result.settings;
+        updateUser(newuser);
+        showWebNotification("儲存成功！");
+        if (profileContainerRef.current) {
+          profileContainerRef.current.scrollTop = 0;
+        }
+      }
+      else {
+        console.error("Error saving data:", response);
+      }
+    } catch (error) {
+      console.error("Error fetching child data:", error);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    const userProfile = JSON.stringify({ 
+      user_id: user.id, 
+      profile: profile
+    });
+    console.log("準備送出的資料：", userProfile);
+    try {
+      const response = await fetch(
+        "https://swep.hnd1.zeabur.app/user/api/profile-url-upd",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: userProfile,
+        }
+      );
+
+      if(response.ok){
+        const result = await response.json();
+        console.log('profile response:', result.profile);
+        const newuser = user;
+        newuser.profile = result.profile;
         updateUser(newuser);
         showWebNotification("儲存成功！");
         
@@ -106,6 +144,7 @@ function UserProfilePage() {
       <ToggleMenu />
       <div className="profile-container" ref={profileContainerRef}>
         <h1 className="title">Setting</h1>
+        <img src={profile} alt="Penguin" />
         <div className="setting">
           <label htmlFor="alias">姓名</label>
           <input

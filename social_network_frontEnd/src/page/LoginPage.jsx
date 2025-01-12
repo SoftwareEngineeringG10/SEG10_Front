@@ -35,7 +35,8 @@ export default function Login() {
     try {
       const user = await sendAPIRequest('user-get', 'POST', { id: email });
       console.log(user.id);
-      const withPic = await sendAPIRequest('profile-url-upd', 'PATCH', {user_id: user.id, profile: picture});
+      //const withPic = await sendAPIRequest('profile-url-upd', 'PATCH', {user_id: user.id, profile: picture});
+      const withPic = user;
       console.log(withPic);
       login(user); // Update context
       navigate('/home'); // Navigate to home page
