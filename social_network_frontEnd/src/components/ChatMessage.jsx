@@ -292,7 +292,7 @@ function ChatMessage({ chat, chatfunc }) {
               return (
                 <div key={message.id} className="chatMessages">
                   <img
-                    src={(member.id === user.id ? user.profile : member.profile) || "default-profile.png"}
+                    src={(member.id === user.id ? user.profile : member.profile) || "/image/penguin-png.png"}
                     alt={member.name || "Unknown"}
                     className="you"
                     onClick={() => handleMemberClick(member.id === user.id ? user : member)}
