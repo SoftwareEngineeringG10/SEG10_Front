@@ -125,3 +125,18 @@ input[type="radio"]:checked + .gender {
 .fixed-email {
   color: #000;
 }
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 10%; /* 圓形圖片 */
+  margin-bottom: 10px; /* 與段落的間距 */
+}
+
+.profile-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 水平居中 */
+  justify-content: center; /* 垂直居中 */
+  height: 30vh; /* 讓父容器全屏 */
+}

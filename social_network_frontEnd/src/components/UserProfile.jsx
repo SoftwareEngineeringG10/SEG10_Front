@@ -5,7 +5,7 @@ import "../assets/page/userProfile.css";
 import ProfilePicture from "./ProfilePicture";
 
 function UserProfilePage() {
-  const { user, updateUser} = useContext(AuthContext);
+  const { user, updateUser, updateUserProfile} = useContext(AuthContext);
   const [alias, setAlias] = useState("");
   const [birth, setBirth] = useState("");
   const [gen, setGen] = useState("");
@@ -19,7 +19,10 @@ function UserProfilePage() {
   const [showProfileModal, setShowProfileModal] = useState(false);
 
   const handleSelectImage = (newProfile) => {
+    updateUserProfile(newProfile);
     setProFile(newProfile); // 更新圖片
+    handleSaveProfile();
+    console.log(user);
   };
 
   // 顯示網頁內通知的函式
@@ -79,7 +82,7 @@ function UserProfilePage() {
   const handleSaveProfile = async () => {
     const userProfile = JSON.stringify({ 
       user_id: user.id, 
-      profile: profile
+      profile: user.profile
     });
     console.log("準備送出的資料：", userProfile);
     try {
@@ -150,14 +153,16 @@ function UserProfilePage() {
       <ToggleMenu />
       <div className="profile-container" ref={profileContainerRef}>
         <h1 className="title">Setting</h1>
-        <img src={profile} alt="Penguin" />
-        <p></p>
-        <button
-          className="save-button"
-          onClick={() => setShowProfileModal(true)}
-        >
-          變更圖片...
-        </button>
+        <div className="profile-image-container">
+          <img src={profile} alt="Penguin" className="profile-image"/>
+          <p></p>
+          <button
+            className="save-button"
+            onClick={() => setShowProfileModal(true)}
+          >
+            變更圖片...
+          </button>
+        </div>
         {showProfileModal && (
           <ProfilePicture
             currentProfile={profile}

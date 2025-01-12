@@ -47,6 +47,17 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
+  const updateUserProfile = async (newProfile) => {
+    setUser((prevUser) => {
+      const updatedUserProfile = {
+        ...prevUser,
+        profile: newProfile,
+      };
+      localStorage.setItem('user', JSON.stringify(updatedUserProfile)); // Persist changes
+      return updatedUserProfile;
+    });
+  };
+
   const updateUserNotifs = (newNotif) => {
     setUser((prevUser) => {
       const updatedUserNotifs = {
@@ -78,7 +89,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateUser , updateUserNotifs, picture}}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, updateUserNotifs, updateUserProfile, picture}}>
       {children}
     </AuthContext.Provider>
   );
