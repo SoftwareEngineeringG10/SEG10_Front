@@ -76,6 +76,8 @@ function UserProfilePage() {
       }
     } catch (error) {
       console.error("Error fetching child data:", error);
+    }finally {
+      alert("更改個人資訊成功");
     }
   };
 
