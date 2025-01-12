@@ -7,7 +7,7 @@ import "../assets/components/ChatAvatar.css";
 import { AuthContext } from "../context/AuthContext";
 
 function ChatAvatar({SelectChat, onSelectChat }) {
-  const { user, updateUser } = useContext(AuthContext);
+  const { user, updateUser, picture } = useContext(AuthContext);
   const [chatRoomsID, setChatRoomsID] = useState(user?.chats || []);
   const [chatRooms, setChatRooms] = useState([]); // Array of chat details
   const [isModalOpen, setIsModalOpen] = useState(false); // For primary modal

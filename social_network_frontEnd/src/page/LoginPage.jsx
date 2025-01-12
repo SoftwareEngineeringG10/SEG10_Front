@@ -34,23 +34,25 @@ export default function Login() {
   const handleUser = async (email, name, picture) => {
     try {
       const user = await sendAPIRequest('user-get', 'POST', { id: email });
-      console.log(user.id);
-      const withPic = await sendAPIRequest('profile-url-upd', 'PATCH', {user_id: user.id, profile: picture});
-      console.log(withPic);
-      login(user); // Update context
-      navigate('/home'); // Navigate to home page
+      const withPic = { ...user, picture: picture}; // 確保包含 picture
+      login(withPic); // 更新 AuthContext 的 user 和 picture
+      navigate('/home');
     } catch {
       console.log('User not found, adding user...');
       try {
-        const newUser = await sendAPIRequest('user-add', 'POST', { id: email, name: name });
-        const withPic = await sendAPIRequest('profile-url-upd', 'PATCH', {user_id: newUser.id, profile: picture});
-        login(withPic); // Update context
-        navigate('/home'); // Navigate to home page
+        const newUser = await sendAPIRequest('user-add', 'POST', { id: email, name });
+        const withPic = await sendAPIRequest('profile-url-upd', 'PATCH', {
+          user_id: newUser.id,
+          profile: picture,
+        });
+        const withPic2 = { ...withPic, picture: picture};
+        login(withPic2); // 更新 AuthContext 的 user 和 picture
+        navigate('/home');
       } catch (error) {
         console.error('Error during user addition:', error);
       }
     }
-  };
+  };  
 
   const fetchGoogleUserInfo = async (accessToken) => {
     try {

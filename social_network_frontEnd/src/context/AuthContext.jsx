@@ -7,6 +7,8 @@ export const AuthProvider = ({ children }) => {
     JSON.parse(localStorage.getItem('user')) || null
   );
 
+  const [picture, setPicture] = useState(null);
+
   useEffect(() => {
     console.log('User state updated:', user);
     // Synchronize all existing chats during login
@@ -23,15 +25,15 @@ export const AuthProvider = ({ children }) => {
   const login = async (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
-    console.log(user);
-    
-
+    console.log(userData);
+    setPicture(userData.picture || null);
   };
   
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    setPicture(null);
   };
 
   const updateUser = async (newChatId) => {
@@ -42,6 +44,17 @@ export const AuthProvider = ({ children }) => {
       };
       localStorage.setItem('user', JSON.stringify(updatedUser)); // Persist changes
       return updatedUser;
+    });
+  };
+
+  const updateUserProfile = async (newProfile) => {
+    setUser((prevUser) => {
+      const updatedUserProfile = {
+        ...prevUser,
+        profile: newProfile,
+      };
+      localStorage.setItem('user', JSON.stringify(updatedUserProfile)); // Persist changes
+      return updatedUserProfile;
     });
   };
 
@@ -76,7 +89,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateUser , updateUserNotifs }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, updateUserNotifs, updateUserProfile, picture}}>
       {children}
     </AuthContext.Provider>
   );
