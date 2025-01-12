@@ -2,9 +2,10 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import ToggleMenu from "./ToggleMenu";
 import { AuthContext } from "../context/AuthContext";
 import "../assets/page/userProfile.css";
+import ProfilePicture from "./ProfilePicture";
 
 function UserProfilePage() {
-  const { user, updateUser } = useContext(AuthContext);
+  const { user, updateUser} = useContext(AuthContext);
   const [alias, setAlias] = useState("");
   const [birth, setBirth] = useState("");
   const [gen, setGen] = useState("");
@@ -15,6 +16,11 @@ function UserProfilePage() {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [showNotification, setShowNotification] = useState(false);
   const profileContainerRef = useRef(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  const handleSelectImage = (newProfile) => {
+    setProFile(newProfile); // 更新圖片
+  };
 
   // 顯示網頁內通知的函式
   const showWebNotification = (message) => {
@@ -106,7 +112,7 @@ function UserProfilePage() {
     } catch (error) {
       console.error("Error fetching child data:", error);
     } finally {
-      alert("更改個人資料成功");
+      alert("更改個人圖片成功");
     }
   };
 
@@ -145,6 +151,20 @@ function UserProfilePage() {
       <div className="profile-container" ref={profileContainerRef}>
         <h1 className="title">Setting</h1>
         <img src={profile} alt="Penguin" />
+        <p></p>
+        <button
+          className="save-button"
+          onClick={() => setShowProfileModal(true)}
+        >
+          變更圖片...
+        </button>
+        {showProfileModal && (
+          <ProfilePicture
+            currentProfile={profile}
+            onSelectImage={handleSelectImage}
+            onClose={() => setShowProfileModal(false)}
+          />
+        )}
         <div className="setting">
           <label htmlFor="alias">姓名</label>
           <input
