@@ -7,7 +7,7 @@ import "../assets/components/ChatAvatar.css";
 import { AuthContext } from "../context/AuthContext";
 
 function ChatAvatar({SelectChat, onSelectChat }) {
-  const { user, updateUser } = useContext(AuthContext);
+  const { user, updateUser, picture } = useContext(AuthContext);
   const [chatRoomsID, setChatRoomsID] = useState(user?.chats || []);
   const [chatRooms, setChatRooms] = useState([]); // Array of chat details
   const [isModalOpen, setIsModalOpen] = useState(false); // For primary modal
@@ -64,7 +64,7 @@ function ChatAvatar({SelectChat, onSelectChat }) {
         const chatDetail = await response.json(); // Chat detail object
         if(upadtechat != chatDetail) onSelectChat(chatDetail);
         console.log('Upadate Chat Contents');
-        console.log(upadtechat.Contents);
+        console.log(upadtechat);
       }
     } catch (error) {
       console.error("Error fetching chat details:", error);
@@ -88,6 +88,17 @@ function ChatAvatar({SelectChat, onSelectChat }) {
       )
     );
   }, [SelectChat?.Name]);
+
+  useEffect(() => {
+    if(!SelectChat?.IsDeleted) return;
+    console.log('Close message');
+    setChatRooms((prevChatRooms) =>
+      prevChatRooms.map((chat) =>
+        chat.ID === SelectChat.ID ? { ...chat, ...SelectChat } : chat
+      )
+    );
+    onSelectChat(null);
+  }, [SelectChat?.IsDeleted]);
 
   const handleAddChat = (newChat) => {
     if (chatRoomsID.includes(newChat.ID)) {
@@ -224,7 +235,9 @@ function ChatAvatar({SelectChat, onSelectChat }) {
       </div>
       <div className="displayChatName">
       {/* Display chat names */}
-      {chatRooms.map((chat) => (
+      {chatRooms
+        .filter((chat) => !chat.IsDeleted)
+        .map((chat) => ( 
         <div key={chat.id}>
           <button className="chat" onClick={() => UpdateChatDetails(chat)}>
             <img src="penguin-png.png" alt="avatar" />
@@ -232,7 +245,8 @@ function ChatAvatar({SelectChat, onSelectChat }) {
               <p>Hello world!</p>
           </button>
         </div>
-      ))}
+      ))
+      }
       </div>
       <div className="homePageBottom">
         <img src={user.profile} alt="Penguin" />

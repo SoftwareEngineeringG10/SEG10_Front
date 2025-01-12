@@ -2,18 +2,28 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import ToggleMenu from "./ToggleMenu";
 import { AuthContext } from "../context/AuthContext";
 import "../assets/page/userProfile.css";
+import ProfilePicture from "./ProfilePicture";
 
 function UserProfilePage() {
-  const { user, updateUser } = useContext(AuthContext);
+  const { user, updateUser, updateUserProfile} = useContext(AuthContext);
   const [alias, setAlias] = useState("");
   const [birth, setBirth] = useState("");
   const [gen, setGen] = useState("");
   const [tel, settel] = useState("");
   const [addr, setAddr] = useState("");
   const [txt, setTxt] = useState("");
+  const [profile, setProFile] = useState(user?.profile || "");
   const [notificationMessage, setNotificationMessage] = useState("");
   const [showNotification, setShowNotification] = useState(false);
   const profileContainerRef = useRef(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  const handleSelectImage = (newProfile) => {
+    updateUserProfile(newProfile);
+    setProFile(newProfile); // 更新圖片
+    handleSaveProfile();
+    console.log(user);
+  };
 
   // 顯示網頁內通知的函式
   const showWebNotification = (message) => {
@@ -35,7 +45,7 @@ function UserProfilePage() {
       tel: tel,
       addr: addr,
       txt: txt,
-    })
+    });
     console.log("準備送出的資料：", userData);
     try {
       const response = await fetch(
@@ -57,6 +67,43 @@ function UserProfilePage() {
         newuser.settings = result.settings;
         updateUser(newuser);
         showWebNotification("儲存成功！");
+        if (profileContainerRef.current) {
+          profileContainerRef.current.scrollTop = 0;
+        }
+      }
+      else {
+        console.error("Error saving data:", response);
+      }
+    } catch (error) {
+      console.error("Error fetching child data:", error);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    const userProfile = JSON.stringify({ 
+      user_id: user.id, 
+      profile: user.profile
+    });
+    console.log("準備送出的資料：", userProfile);
+    try {
+      const response = await fetch(
+        "https://swep.hnd1.zeabur.app/user/api/profile-url-upd",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: userProfile,
+        }
+      );
+
+      if(response.ok){
+        const result = await response.json();
+        console.log('profile response:', result.profile);
+        const newuser = user;
+        newuser.profile = result.profile;
+        updateUser(newuser);
+        showWebNotification("儲存成功！");
         
         if (profileContainerRef.current) {
           profileContainerRef.current.scrollTop = 0;
@@ -68,7 +115,7 @@ function UserProfilePage() {
     } catch (error) {
       console.error("Error fetching child data:", error);
     } finally {
-      alert("更改個人資料成功");
+      alert("更改個人圖片成功");
     }
   };
 
@@ -106,6 +153,23 @@ function UserProfilePage() {
       <ToggleMenu />
       <div className="profile-container" ref={profileContainerRef}>
         <h1 className="title">Setting</h1>
+        <div className="profile-image-container">
+          <img src={profile} alt="Penguin" className="profile-image"/>
+          <p></p>
+          <button
+            className="save-button"
+            onClick={() => setShowProfileModal(true)}
+          >
+            變更圖片...
+          </button>
+        </div>
+        {showProfileModal && (
+          <ProfilePicture
+            currentProfile={profile}
+            onSelectImage={handleSelectImage}
+            onClose={() => setShowProfileModal(false)}
+          />
+        )}
         <div className="setting">
           <label htmlFor="alias">姓名</label>
           <input

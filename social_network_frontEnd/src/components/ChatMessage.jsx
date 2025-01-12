@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 const socket = io('https://swep-socket-server.zeabur.app');
 
 function ChatMessage({ chat, chatfunc }) {
-  const { user } = useContext(AuthContext);
+  const { user, picture } = useContext(AuthContext);
   const [members, setMembers] = useState([user]);
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
@@ -37,6 +37,20 @@ function ChatMessage({ chat, chatfunc }) {
       console.error(`Error fetching message with ID ${msgId}:`, error);
       return null;
     }
+  };
+  
+
+  const updateMember = async () => {
+    const updatedMembers = members.map((member) => {
+      if (member.id === user.id) {
+        
+        const newuser = { ...member, profile: user.profile}
+        console.log('change profile', newuser);
+        return newuser; 
+      }
+      return member;
+    });
+    setMembers(updatedMembers);
   };
 
   // Fetch messages and members on initial render
@@ -69,6 +83,7 @@ function ChatMessage({ chat, chatfunc }) {
         setMessages(fetchedMessages.filter(Boolean));
 
         // Fetch members
+        await updateMember();
         const fetchedUsers = await Promise.all(
           chat.Members?.map(async (memID) => {
             try {
@@ -89,6 +104,7 @@ function ChatMessage({ chat, chatfunc }) {
             }
           }) || []
         );
+        
         setMembers(fetchedUsers.filter(Boolean));
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -238,7 +254,8 @@ function ChatMessage({ chat, chatfunc }) {
   };
 
   const handleMemberClick = (member) => {
-    console.log('click info');
+    console.log('click info', member);
+    console.log(members);
     setSelectedMember(member);
   };
 
@@ -270,14 +287,15 @@ function ChatMessage({ chat, chatfunc }) {
           <hr className="headerLine" />
           <div className="chat-messages" ref={messageListRef}>
             {messages.map((message) => {
+              
               const member = members.find((m) => m.id === message.sender) || {};
               return (
                 <div key={message.id} className="chatMessages">
                   <img
-                    src={member.profile || "default-profile.png"}
+                    src={(member.id === user.id ? user.profile : member.profile) || "default-profile.png"}
                     alt={member.name || "Unknown"}
                     className="you"
-                    onClick={() => handleMemberClick(member)}
+                    onClick={() => handleMemberClick(member.id === user.id ? user : member)}
                   />
                   <span> {message.content} </span>
                 </div>
