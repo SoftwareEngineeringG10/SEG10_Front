@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import ChatInfo from "./ChatInfo";
 import MemberInfoPopup from "./MemberInfoPopup";
 import "boxicons";
-import "../assets/components/chatMessage.css";
+import "../assets/components/ChatMessage.css";
 import io from 'socket.io-client';
 
 const socket = io('https://swep-socket-server.zeabur.app');

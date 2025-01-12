@@ -57,20 +57,21 @@ hr {
 }
 
 .agree {
-  width: 40px;
-  height: 40px;
-  background-image: url("images/agree.PNG");
-  background-size: cover;
   cursor: pointer;
   position: absolute;
   right: 80px;
   top: 10px;
   border: none;
+  width: 40px;
+  height: 40px;
+  background-color: #ffffff;
 }
-
-.agree:hover {
-  background-image: url("images/agree_hover.png");
-  border: none;
+.agree img {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
 }
 
 .agree:focus {
@@ -78,22 +79,22 @@ hr {
 }
 
 .disagree {
-  width: 40px;
-  height: 40px;
-  background-image: url("images/disagree.PNG");
-  background-size: cover;
   cursor: pointer;
   position: absolute;
   right: 20px;
   top: 10px;
   border: none;
+  width: 40px;
+  height: 40px;
+  background-color: #ffffff;
 }
-
-.disagree:hover {
-  background-image: url("images/disagree_hover.png");
-  border: none;
+.disagree img {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
 }
-
 .disagree:focus {
     outline: none;
 }

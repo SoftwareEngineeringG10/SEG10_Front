@@ -201,6 +201,7 @@ function FriendRequest() {
             // Find the corresponding friend object
             const matchingFriend = friend.find((fr) => fr.id === fndRsp.name);
             return (
+              <div>
               <div key={fndRsp.id} className="friendrequest">
                 <img
                   src={matchingFriend?.profile || "images/default-penguin.png"} // Use the friend's image if available, otherwise fallback
@@ -213,12 +214,16 @@ function FriendRequest() {
                   className="agree"
                   onClick={() => handleResponse(fndRsp.id, fndRsp.name, true)}
                 >
+                <img src="images/agree_hover.png"></img>
                 </button>
                 <button
                   className="disagree"
                   onClick={() => handleResponse(fndRsp.id, fndRsp.name, false)}
                 >
+                  <img src="images/disagree_hover.png"></img>
                 </button>
+              </div>
+              <hr />
               </div>
             );
           })}
