@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const ProfilePicture = ({ currentProfile, onSelectImage, onClose }) => {
   
-	const { picture } = useContext(AuthContext);
+	const picture = localStorage.getItem('user-origin-profile');
 
 	const images = [
     picture,
