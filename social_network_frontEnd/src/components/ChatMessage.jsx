@@ -330,6 +330,7 @@ function ChatMessage({ chat, chatfunc }) {
             isChatInfoOpen={isChatInfoOpen}
             onCloseChatInfo={() => setChatInfoOpen(false)}
             chatfunc = {chatfunc}
+            members={members}
           ></ChatInfo>
         </>
       )}
