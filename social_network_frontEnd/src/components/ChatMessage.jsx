@@ -7,6 +7,7 @@ import "../assets/components/ChatMessage.css";
 import io from 'socket.io-client';
 
 const socket = io('https://swep-socket-server.zeabur.app');
+const adminstr = "__admin__";
 
 function ChatMessage({ chat, chatfunc }) {
   const { user, picture } = useContext(AuthContext);
@@ -84,8 +85,18 @@ function ChatMessage({ chat, chatfunc }) {
 
         // Fetch members
         await updateMember();
+        console.log(chat.Members);
         const fetchedUsers = await Promise.all(
-          chat.Members?.map(async (memID) => {
+          chat.Members?.map(async (memberID) => {
+            let memID = memberID;
+            if (memberID.endsWith(adminstr)) {
+              memID = memberID.slice(0, -adminstr.length);
+              console.log("找到管理員:", memberID);
+              
+            } else {
+              //console.log("字串不以指定後綴結尾");
+            }
+
             try {
               const response = await fetch("https://swep.hnd1.zeabur.app/user/api/user-get", {
                 method: "POST",
@@ -287,7 +298,6 @@ function ChatMessage({ chat, chatfunc }) {
           <hr className="headerLine" />
           <div className="chat-messages" ref={messageListRef}>
             {messages.map((message) => {
-              
               const member = members.find((m) => m.id === message.sender) || {};
               return (
                 <div key={message.id} className="chatMessages">
@@ -331,6 +341,7 @@ function ChatMessage({ chat, chatfunc }) {
             onCloseChatInfo={() => setChatInfoOpen(false)}
             chatfunc = {chatfunc}
             members={members}
+            membersID={chat.Members}
           ></ChatInfo>
         </>
       )}

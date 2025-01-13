@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import "../assets/components/ViewChatMember.css";
 
-const ViewChatMember = ({chat, onCloseChatInfo, members}) => {
+const adminstr = "__admin__"
+const ViewChatMember = ({chat, onCloseChatInfo, members, membersID}) => {
   const { user } = useContext(AuthContext); // You can use `user` if needed elsewhere.
   const id = chat.ID;
   const [showChatMember, setshowChatMember] = useState(false);
@@ -12,7 +13,12 @@ const ViewChatMember = ({chat, onCloseChatInfo, members}) => {
       <button
         style={{ cursor: "pointer" }}
         className="showChatId"
-        onClick={() => setshowChatMember(true)}
+        onClick={() => {
+						setshowChatMember(true);
+						console.log(members);
+						console.log(membersID);
+					}
+				}
       >
         顯示成員
       </button>
@@ -31,7 +37,13 @@ const ViewChatMember = ({chat, onCloseChatInfo, members}) => {
 										<img src={member.profile} alt={member.name} />
 										<div className="friendName">
 											{member.name || "Loading..."}
+											{
+												member?.name && membersID.some(str => str.includes(member.id) && str.includes(adminstr))
+												? (" (管理員) ") 
+												: ("")
+											}
 										</div>
+										
 									</div>
 									<hr className="Line" />
 								</React.Fragment>
