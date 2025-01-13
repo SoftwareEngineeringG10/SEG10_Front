@@ -6,8 +6,8 @@ import "boxicons";
 import "../assets/components/ChatMessage.css";
 import io from 'socket.io-client';
 
-//const socket = io('https://swep-socket-server.zeabur.app');
-const socket = io('http://localhost:8080');
+const socket = io('https://swep-socket-server.zeabur.app');
+//const socket = io('http://localhost:8080');
 const adminstr = "__admin__";
 
 function ChatMessage({ chat, chatfunc }) {
