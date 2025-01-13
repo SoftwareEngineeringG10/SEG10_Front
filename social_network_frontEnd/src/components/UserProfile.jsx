@@ -21,7 +21,7 @@ function UserProfilePage() {
   const handleSelectImage = (newProfile) => {
     updateUserProfile(newProfile);
     setProFile(newProfile); // 更新圖片
-    handleSaveProfile();
+    handleSaveProfile(newProfile);
     console.log(user);
   };
 
@@ -81,10 +81,10 @@ function UserProfilePage() {
     }
   };
 
-  const handleSaveProfile = async () => {
+  const handleSaveProfile = async (newProfile) => {
     const userProfile = JSON.stringify({ 
       user_id: user.id, 
-      profile: user.profile
+      profile: newProfile
     });
     console.log("準備送出的資料：", userProfile);
     try {
