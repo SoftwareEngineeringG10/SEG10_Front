@@ -80,11 +80,10 @@ function UserProfilePage() {
       alert("更改個人資訊成功");
     }
   };
-
-  const handleSaveProfile = async (newPorfile) => {
+  const handleSaveProfile = async (newProfile) => {
     const userProfile = JSON.stringify({ 
       user_id: user.id, 
-      profile: newPorfile
+      profile: newProfile
     });
     console.log("準備送出的資料：", userProfile);
     try {
