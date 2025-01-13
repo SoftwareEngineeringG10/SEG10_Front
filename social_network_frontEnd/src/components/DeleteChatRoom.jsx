@@ -10,7 +10,7 @@ const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc, membersID, DeleteCt}) 
   const CheckDeleteChatRoom = async () => {
     console.log(chat);
     console.log(membersID);
-    if (membersID.some(str => str.includes(user.id) && str.includes(adminstr))) {
+    if (membersID.some(str => str.includes(user.id) && str.includes(adminstr)) || !membersID.some(str => str.includes(adminstr))) {
       setShowDeleteConfirm(true);
     } else {
       console.log(`${user.id} 沒有權限`);
@@ -19,6 +19,7 @@ const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc, membersID, DeleteCt}) 
     }
   }
   const ExecuteDeleteChatRoom = async () => {
+    await DeleteCt();
     try {
       const response = await fetch("https://swep.hnd1.zeabur.app/chat/api/chat-del", {
         method: "DELETE",
@@ -27,7 +28,7 @@ const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc, membersID, DeleteCt}) 
       });
       if (response.ok) {
         const delchat = {...chat, IsDeleted: true};
-        await DeleteCt();
+        
         console.log(`${user.id} 刪除了 ${chat.ID}`);
         chatfunc(delchat);
         console.log('chatroom delete successfully!');

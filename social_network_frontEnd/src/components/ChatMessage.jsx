@@ -126,7 +126,7 @@ function ChatMessage({ chat, chatfunc }) {
     };
 
 
-    fetchAllData();
+    if(!chat.IsDeleted) fetchAllData();
   }, [chat.Contents, chat.Members]);
 
   
@@ -161,12 +161,13 @@ function ChatMessage({ chat, chatfunc }) {
   //initial request
   useEffect(() => {
     const execute = async () => {
-      setMessages([]); 
-      await getMsgs();
+      setMessages([]);
+      console.log(chat);
+      if(!chat.IsDeleted) await getMsgs();
     };
   
     execute();
-  }, [chat.Contents]);
+  }, [chat?.Contents]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -218,7 +219,10 @@ function ChatMessage({ chat, chatfunc }) {
 
     const DeleteChat = (data) => {
       console.log('Chatroom has been deleted');
-      chatfunc(null); // 設定為 null，退出當前聊天室
+      const nochat = null;
+      chat = null;
+      chatfunc(nochat); // 設定為 null，退出當前聊天室
+      socket.disconnect();
     };
 
     socket.on('receive_message', handleReceiveMessage);

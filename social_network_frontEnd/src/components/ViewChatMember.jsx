@@ -6,15 +6,15 @@ const adminstr = "__admin__"
 const ViewChatMember = ({chat, onCloseChatInfo, members, membersID}) => {
   const { user } = useContext(AuthContext); // You can use `user` if needed elsewhere.
   const id = chat.ID;
-  const [showChatMember, setshowChatMember] = useState(false);
+  const [ViewChatMember, setViewChatMember] = useState(false);
 
   return (
     <div>
       <button
         style={{ cursor: "pointer" }}
-        className="showChatId"
+        className="ViewChatId"
         onClick={() => {
-						setshowChatMember(true);
+						setViewChatMember(true);
 						console.log(members);
 						console.log(membersID);
 					}
@@ -23,9 +23,9 @@ const ViewChatMember = ({chat, onCloseChatInfo, members, membersID}) => {
         顯示成員
       </button>
 
-      {showChatMember && (
-				<div className="showRoomID">
-					<div className="showRoomIDcontent">
+      {ViewChatMember && (
+				<div className="ViewChatroomID">
+					<div className="ViewChatroomIDcontent">
 						<h2>聊天室成員</h2>
 						<hr />
 						{/* 滾動容器 */}
@@ -53,7 +53,7 @@ const ViewChatMember = ({chat, onCloseChatInfo, members, membersID}) => {
 
 						<button
 							onClick={() => {
-								setshowChatMember(false);
+								setViewChatMember(false);
 								onCloseChatInfo();
 							}}
 							className="closeID"
