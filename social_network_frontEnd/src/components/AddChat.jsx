@@ -18,7 +18,7 @@ const AddChat = ({ onAddChat, onClose}) => {
           },
           body: JSON.stringify({
             name: chatName,
-            members: [user.id],
+            members: [user.id + "__admin__"],
           }),
         }
       );

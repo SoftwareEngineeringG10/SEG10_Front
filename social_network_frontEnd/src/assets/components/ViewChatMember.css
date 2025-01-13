@@ -1,0 +1,129 @@
+.ViewChatId {
+    background-color: #fff;
+    color: #000;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    display: block;
+    width: 160px;
+    text-align: left;
+  }
+  
+  .ViewChatId:hover {
+    border: none;
+    background-color: #D9D9D9;
+  }
+  
+  .ViewChatId:focus {
+    outline: none;
+  }
+
+  .ViewChatroomID {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ViewChatroomIDcontent {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    width: 550px;
+    height: 550px;
+  }
+  .ViewChatroomIDcontent h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  .ViewChatroomIDcontent p {
+    text-align: left;
+    font-size: 1.25em;
+  }
+  .ViewChatroomIDcontent span {
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 8px;
+    color: #000;
+    font-size: 0.9em;
+  }
+  .closeID {
+    margin: 5px;
+    padding: 8px 16px;
+    background-color: #DFDFDF;
+    color: #000;
+    width: 125px;
+    outline: none;
+    border: none;
+  }
+  .closeID:focus {
+    outline: none;
+  }
+  .closeID:hover {
+    outline: none;
+    background-color: #D9D9D9;
+  }
+
+
+  hr {
+    margin: 1px;
+    position: relative;
+    top: 20px;
+  }
+  
+  .ViewChatroomIDcontent {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+.friendlist {
+  position: relative;
+  color: #000;
+  font-size: large;
+  display: flex;
+  flex-direction: row;
+}
+
+.friendlist img {
+  width: 60px;
+  height: 60px;
+}
+
+.friendName {
+  position: relative;
+  top: 20px;
+  left: 5px;
+}
+  
+  .Line {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin: 20px 0; /* 確保有足夠的上下間距 */
+}
+
+.friendlist-container {
+  width: 50vh;
+  height: 50vh;
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid #000;
+  overflow-y: auto;
+  scrollbar-color: #C6C6C6 #ffffff;
+  color: #000;
+}
+
+  
