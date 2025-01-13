@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const adminstr = "__admin__";
 
-const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc, membersID}) => {
+const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc, membersID, DeleteCt}) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { user } = useContext(AuthContext);
   const CheckDeleteChatRoom = async () => {
@@ -12,7 +12,6 @@ const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc, membersID}) => {
     console.log(membersID);
     if (membersID.some(str => str.includes(user.id) && str.includes(adminstr))) {
       setShowDeleteConfirm(true);
-      console.log(`${user.id} 刪除了 ${chat.ID}`);
     } else {
       console.log(`${user.id} 沒有權限`);
       alert("您沒有刪除聊天室的權限");
@@ -28,6 +27,8 @@ const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc, membersID}) => {
       });
       if (response.ok) {
         const delchat = {...chat, IsDeleted: true};
+        await DeleteCt();
+        console.log(`${user.id} 刪除了 ${chat.ID}`);
         chatfunc(delchat);
         console.log('chatroom delete successfully!');
       } else {

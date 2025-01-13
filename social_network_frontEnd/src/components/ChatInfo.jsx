@@ -5,7 +5,7 @@ import ShowChatRoomId from "./ShowChatRoomId";
 import EditChatRoom from "./EditChatRoom";
 import DeleteChatRoom from "./DeleteChatRoom";
 import ViewChatMember from "./ViewChatMember";
-const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc, members, membersID }) => {
+const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc, members, membersID, DeleteCt }) => {
   if (!isChatInfoOpen) return null;
   const { user } = useContext(AuthContext);
   const ChatInfoCloseRef = useRef(null);
@@ -31,7 +31,7 @@ const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc, members, me
         <hr className="hrline"/>
         <EditChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc}/>
         <hr className="hrline"/>
-        <DeleteChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc} membersID={membersID} />
+        <DeleteChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc} membersID={membersID} DeleteCt={DeleteCt}/>
         <hr className="hrline"/>
         <ViewChatMember chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc} members={members} membersID={membersID} />
         </div>

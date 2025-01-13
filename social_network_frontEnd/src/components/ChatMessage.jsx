@@ -6,7 +6,8 @@ import "boxicons";
 import "../assets/components/ChatMessage.css";
 import io from 'socket.io-client';
 
-const socket = io('https://swep-socket-server.zeabur.app');
+//const socket = io('https://swep-socket-server.zeabur.app');
+const socket = io('http://localhost:8080');
 const adminstr = "__admin__";
 
 function ChatMessage({ chat, chatfunc }) {
@@ -128,6 +129,7 @@ function ChatMessage({ chat, chatfunc }) {
     fetchAllData();
   }, [chat.Contents, chat.Members]);
 
+  
   const getMsgs = async () => {
     console.log('initial message');
     try {
@@ -183,6 +185,11 @@ function ChatMessage({ chat, chatfunc }) {
     }
   }, [messages]);
 
+  const DeleteCt = async () => {
+    const msgData = {roomID: chat.ID};
+    console.log('in DeleteCt');
+    socket.emit('delete_chat_room', msgData);
+  }
 
   useEffect(() => {
     if (chat) {
@@ -191,6 +198,8 @@ function ChatMessage({ chat, chatfunc }) {
       socket.emit('join_room', chat.ID);
       // console.log('join ', chat.ID);
       // console.log(chat.Contents);
+    } else {
+      return;
     }
 
     // 接收訊息
@@ -207,7 +216,13 @@ function ChatMessage({ chat, chatfunc }) {
       // console.log(chat.Contents);
     };
 
+    const DeleteChat = (data) => {
+      console.log('Chatroom has been deleted');
+      chatfunc(null); // 設定為 null，退出當前聊天室
+    };
+
     socket.on('receive_message', handleReceiveMessage);
+    socket.on('chat_room_deleted', DeleteChat);
 
     return () => {
       socket.off('receive_message', handleReceiveMessage); // 清理監聽器
@@ -342,6 +357,7 @@ function ChatMessage({ chat, chatfunc }) {
             chatfunc = {chatfunc}
             members={members}
             membersID={chat.Members}
+            DeleteCt={DeleteCt}
           ></ChatInfo>
         </>
       )}
