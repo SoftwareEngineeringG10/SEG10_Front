@@ -1,10 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../assets/components/DeleteChatRoom.css";
+import { AuthContext } from "../context/AuthContext";
 
-const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc}) => {
+const adminstr = "__admin__";
+
+const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc, membersID, DeleteCt}) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
+  const { user } = useContext(AuthContext);
+  const CheckDeleteChatRoom = async () => {
+    console.log(chat);
+    console.log(membersID);
+    if (membersID.some(str => str.includes(user.id) && str.includes(adminstr)) || !membersID.some(str => str.includes(adminstr))) {
+      setShowDeleteConfirm(true);
+    } else {
+      console.log(`${user.id} 沒有權限`);
+      alert("您沒有刪除聊天室的權限");
+      onCloseChatInfo(true);
+    }
+  }
   const ExecuteDeleteChatRoom = async () => {
+    await DeleteCt();
     try {
       const response = await fetch("https://swep.hnd1.zeabur.app/chat/api/chat-del", {
         method: "DELETE",
@@ -13,6 +28,8 @@ const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc}) => {
       });
       if (response.ok) {
         const delchat = {...chat, IsDeleted: true};
+        
+        console.log(`${user.id} 刪除了 ${chat.ID}`);
         chatfunc(delchat);
         console.log('chatroom delete successfully!');
       } else {
@@ -30,7 +47,9 @@ const DeleteChatRoom = ({chat, onCloseChatInfo, chatfunc}) => {
       <button
         style={{ cursor: "pointer" }}
         className="deleteChatRoomBtn"
-        onClick={() => setShowDeleteConfirm(true)}
+        onClick={() => {
+          CheckDeleteChatRoom();
+        }}
       >
         刪除聊天室
       </button>

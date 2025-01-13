@@ -4,7 +4,8 @@ import "../assets/components/ChatInfo.css";
 import ShowChatRoomId from "./ShowChatRoomId";
 import EditChatRoom from "./EditChatRoom";
 import DeleteChatRoom from "./DeleteChatRoom";
-const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc }) => {
+import ViewChatMember from "./ViewChatMember";
+const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc, members, membersID, DeleteCt }) => {
   if (!isChatInfoOpen) return null;
   const { user } = useContext(AuthContext);
   const ChatInfoCloseRef = useRef(null);
@@ -12,6 +13,7 @@ const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc }) => {
     if(ChatInfoCloseRef.current && !ChatInfoCloseRef.current.contains(event.target)){
       onCloseChatInfo();
       console.log('onCloseChatInfo:', typeof onCloseChatInfo);
+      //console.log(membersID);
     }
   };
   useEffect(() => {
@@ -29,7 +31,9 @@ const ChatInfo = ({ isChatInfoOpen, onCloseChatInfo, chat, chatfunc }) => {
         <hr className="hrline"/>
         <EditChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc}/>
         <hr className="hrline"/>
-        <DeleteChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc}/>
+        <DeleteChatRoom chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc} membersID={membersID} DeleteCt={DeleteCt}/>
+        <hr className="hrline"/>
+        <ViewChatMember chat={chat} onCloseChatInfo={onCloseChatInfo} chatfunc={chatfunc} members={members} membersID={membersID} />
         </div>
       </div>
     </div>
